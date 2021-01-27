@@ -46,6 +46,10 @@ void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace);
 
 void initializeBillStructWithZeros(struct Bill *userBill);
 
+int calculateTax(int fare, int percentage) {
+    return (percentage * fare) / 100.0;
+}
+
 int calculateFare(int distance) {
     if (distance == 0) {
         return 0;
