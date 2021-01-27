@@ -162,7 +162,7 @@ void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace) {
     printf("\n");
 
     printSpaces(initialSpace);
-    printf("Fare: %d", bill->fare);
+    printf("Fare: ₹ %d", bill->fare);
 
     printf("\n");
     printf("\n");
