@@ -6,6 +6,8 @@
 #include <unistd.h>
 #endif  // _WIN32
 
+// TODO make this clean code; this is very ugly
+
 #define TERMINAL_WIDTH 80
 #define TERMINAL_HEIGHT 24
 
@@ -44,6 +46,56 @@ void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace);
 
 void initializeBillStructWithZeros(struct Bill *userBill);
 
+int calculateFare(int distance) {
+    if (distance == 0) {
+        return 0;
+    }
+    int fare = 1000;
+    if (distance <= 10) {
+        fare += distance * 15;
+        fare += calculateTax(fare, 18);
+        return fare;
+    }
+    fare += 10 * 15;  // for first 10 km
+    distance = distance - 10;
+
+    if (distance <= 50) {
+        fare += distance * 14;
+        fare += calculateTax(fare, 18);
+        return fare;
+    }
+    fare += 50 * 14;  // for next 50 km
+    distance = distance - 50;
+
+    if (distance <= 100) {
+        fare += distance * 12;
+        fare += calculateTax(fare, 18);
+        return fare;
+    }
+    fare += 100 * 12;  // for next 100 km
+    distance = distance - 100;
+
+    if (distance <= 500) {
+        fare += distance * 10;
+        fare += calculateTax(fare, 18);
+        return fare;
+    }
+    fare += 500 * 10;  // for next 500 km
+    distance = distance - 500;
+
+    if (distance <= 1000) {
+        fare += distance * 9;
+        fare += calculateTax(fare, 18);
+        return fare;
+    }
+    fare += 1000 * 9;  // for next 1000 km
+    distance = distance - 1000;
+
+    fare += distance * 8;  // remaining distance
+    fare += calculateTax(fare, 18);
+    return fare;
+}
+
 int main() {
     animateCar(40, TERMINAL_WIDTH);
     animateCar(40, TERMINAL_WIDTH);
@@ -65,6 +117,10 @@ int main() {
     printBillStruct(&userBill, 1, 14);
 
     getIntInput(&(userBill.distance), "Enter Distance Traveled: ", 5);
+    printBillStruct(&userBill, 1, 14);
+
+    int fare = calculateFare(userBill.distance);
+    userBill.fare = fare;
     printBillStruct(&userBill, 1, 14);
 
     return 0;
@@ -96,7 +152,7 @@ void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace) {
     printSpaces(initialSpace);
     printf("Taxi Number: %s", bill->taxiNumber);
     printSpaces(inBetweenSpace);
-    printf("Distance: %d", bill->distance);
+    printf("Distance: %d km", bill->distance);
 
     printf("\n");
     printf("\n");
