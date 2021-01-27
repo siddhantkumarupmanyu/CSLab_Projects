@@ -17,7 +17,7 @@ static char *car[] = {
     " ----|/ \\______|______/ \\_||",
     "______\\_/_____________\\_/_______"};
 
-static int carMaxLineLength = 33;
+static const int carMaxLineLength = 33;
 
 struct Bill {
     char driverName[25];
@@ -40,9 +40,9 @@ void printCar();
 void getIntInput(int *input, char *prompt, int space);
 void getStringInput(char input[], char *prompt, int space);
 
-void printBillStruct(struct Bill bill, int initialSpace, int inBetweenSpace);
+void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace);
 
-void initializeBillStructWithZeros(struct Bill userBill);
+void initializeBillStructWithZeros(struct Bill *userBill);
 
 int main() {
     animateCar(40, TERMINAL_WIDTH);
@@ -51,47 +51,61 @@ int main() {
 
     struct Bill userBill;
 
-    initializeBillStructWithZeros(userBill);
+    initializeBillStructWithZeros(&userBill);
 
-    printBillStruct(userBill, 1, 8);
+    printBillStruct(&userBill, 1, 14);
 
     getStringInput(userBill.driverName, "Enter Driver Name: ", 5);
-    printBillStruct(userBill, 1, 8);
+    printBillStruct(&userBill, 1, 14);
 
     getStringInput(userBill.driverLicense, "Enter Driver License: ", 5);
-    printBillStruct(userBill, 1, 8);
+    printBillStruct(&userBill, 1, 14);
 
     getStringInput(userBill.taxiNumber, "Enter Taxi Number: ", 5);
-    printBillStruct(userBill, 1, 8);
+    printBillStruct(&userBill, 1, 14);
 
-    getIntInput(userBill.distance, "Enter Distance Traveled: ", 5);
-    printBillStruct(userBill, 1, 8);
+    getIntInput(&(userBill.distance), "Enter Distance Traveled: ", 5);
+    printBillStruct(&userBill, 1, 14);
 
-    printf("\n");
     return 0;
 }
 
-void initializeBillStructWithZeros(struct Bill userBill) {
-    strcpy(userBill.driverName, "---");
-    strcpy(userBill.driverLicense, "---");
-    strcpy(userBill.taxiNumber, "---");
-    userBill.distance = 0;
-    userBill.fare = 0;
+void initializeBillStructWithZeros(struct Bill *userBill) {
+    strcpy(userBill->driverName, "---");
+    strcpy(userBill->driverLicense, "---");
+    strcpy(userBill->taxiNumber, "---");
+    userBill->distance = 0;
+    userBill->fare = 0;
 }
 
-void printBillStruct(struct Bill bill, int initialSpace, int inBetweenSpace) {
-    printSpaces(initialSpace);
-    printf("Driver Name: %s", bill.driverName);
-    printSpaces(inBetweenSpace);
-    printf("Driver License Number: %s", bill.driverLicense);
+void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace) {
+    clearScreen();
+    printCar((TERMINAL_WIDTH - carMaxLineLength) / 2);
+
+    printf("\n");
+    printf("\n");
 
     printSpaces(initialSpace);
-    printf("Taxi Number: %s", bill.taxiNumber);
+    printf("Driver Name: %s", bill->driverName);
     printSpaces(inBetweenSpace);
-    printf("Distance: %d", bill.distance);
+    printf("Driver License Number: %s", bill->driverLicense);
+
+    printf("\n");
+    printf("\n");
 
     printSpaces(initialSpace);
-    printf("Fare: %d", bill.fare);
+    printf("Taxi Number: %s", bill->taxiNumber);
+    printSpaces(inBetweenSpace);
+    printf("Distance: %d", bill->distance);
+
+    printf("\n");
+    printf("\n");
+
+    printSpaces(initialSpace);
+    printf("Fare: %d", bill->fare);
+
+    printf("\n");
+    printf("\n");
 }
 
 void getIntInput(int *input, char *prompt, int space) {
