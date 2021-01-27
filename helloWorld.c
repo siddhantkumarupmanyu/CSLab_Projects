@@ -29,8 +29,11 @@ void sleepcp(int milliseconds);
 void printCar();
 
 int main() {
-    animateCar(170);
+    animateCar(40, TERMINAL_WIDTH);
+    animateCar(40, TERMINAL_WIDTH);
+    animateCar(40, (TERMINAL_WIDTH + carMaxLineLength) / 2);
 
+    
     printf("\n");
     return 0;
 }
@@ -43,9 +46,9 @@ void printCar(int spaces) {
     }
 }
 
-void animateCar(int sleepTime) {
+void animateCar(int sleepTime, int width) {
     int increament = 1;
-    for (int j = carMaxLineLength, k = 0; j < TERMINAL_WIDTH;) {
+    for (int j = carMaxLineLength, k = 0; j < width;) {
         sleepcp(sleepTime);
         clearScreen();
         printCar(k);
