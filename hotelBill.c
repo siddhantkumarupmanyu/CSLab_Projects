@@ -58,11 +58,14 @@ void printSilverSuitWithoutCost(int space, int n);
 void printBronzeSuitWithoutCost(int space, int n);
 
 void getGoldDetails(struct Bill *userBill, struct Gold *goldStruct);
-void getSilverDetails(struct Bill *userBill, struct Silver *goldStruct);
+void getSilverDetails(struct Bill *userBill, struct Silver *silverStruct);
+void getBronzeDetails(struct Bill *userBill, struct Bronze *bronzeStruct);
 
 void getSuit(struct Bill *userBill);
 
 void printSpaces(int count);
+
+// it would be much easier to write if we used oop language
 
 int main() {
     struct Bill userBill;
@@ -75,23 +78,28 @@ int main() {
 
     getSuit(&userBill);
 
+    struct Gold goldStruct;
+    struct Silver silverStruct;
+    struct Bronze bronzeStruct;
+
     switch (userBill.selectedSuitType) {
         case 1: {
-            struct Gold goldStruct;
             getGoldDetails(&userBill, &goldStruct);
+            userBill.selectedSuit = &goldStruct;
             break;
         }
 
         case 2: {
-            struct Silver silverStruct;
             getSilverDetails(&userBill, &silverStruct);
+            userBill.selectedSuit = &silverStruct;
             break;
         }
 
-            /* case 3:
-            struct Gold bronzeStruct;
-            getBronzeDetails(,&bronzeStruct);
-            break;  */
+        case 3: {
+            getBronzeDetails(&userBill, &bronzeStruct);
+            userBill.selectedSuit = &bronzeStruct;
+            break;
+        }
 
         default:
             printf("Something went wrong");
@@ -276,6 +284,52 @@ void printBronzeSuitWithoutCost(int space, int n) {
     printSpaces(subListSpace);
     printf("-hotWater");
     printf("\n");
+}
+
+void printBronzeSuitWithCost(int space, struct Bronze *bronze) {
+    int subListSpace = space + 2;
+    printSpaces(space);
+    printf("Bronze");
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-breakfast %d", bronze->breakFast);
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-carParking %d", bronze->carParking);
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-hotWater %d", bronze->hotWater);
+    printf("\n");
+    printf("\n");
+}
+
+void initilizeBronzeStruct(struct Bronze *bronzeStruct) {
+    bronzeStruct->breakFast = 0;
+    bronzeStruct->carParking = 0;
+    bronzeStruct->hotWater = 0;
+}
+
+void getBronzeDetails(struct Bill *userBill, struct Bronze *bronzeStruct) {
+    int n = 0;
+    initilizeBronzeStruct(bronzeStruct);
+
+    printBillStruct(userBill, 1, 14);
+    printBronzeSuitWithCost(5, bronzeStruct);
+    getIntInput(&n, "Breakfast for Person (Zero for None): ", 5);
+    bronzeStruct->breakFast = n * 100;
+
+    printBillStruct(userBill, 1, 14);
+    printBronzeSuitWithCost(5, bronzeStruct);
+    getIntInput(&n, "Car parking for Night (Zero for None): ", 5);
+    bronzeStruct->carParking = n * 50;
+
+    printBillStruct(userBill, 1, 14);
+    printBronzeSuitWithCost(5, bronzeStruct);
+    getIntInput(&n, "Hot water for Persons (Zero for None): ", 5);
+    bronzeStruct->hotWater = n * 50;
+
+    printBillStruct(userBill, 1, 14);
+    printBronzeSuitWithCost(5, bronzeStruct);
 }
 
 void getCustomerDetails(struct Bill *userBill) {
