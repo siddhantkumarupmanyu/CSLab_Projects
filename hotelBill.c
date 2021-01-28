@@ -52,7 +52,7 @@ void initializeBillStructWithZeros(struct Bill *userBill);
 
 void getCustomerDetails(struct Bill *userBill);
 
-void printGoldSuit(int space);
+void printGoldSuit(int space, int n);
 
 void getSuit(struct Bill *userBill);
 
@@ -72,27 +72,32 @@ int main() {
     return 0;
 }
 
-void printGoldSuit(int space) {
+void printGoldSuit(int space, int n) {
     int subListSpace = space + 2;
     printSpaces(space);
-    printf("Gold ");
+    printf("%d.Gold ", n);
+    printf("\n");
     printSpaces(subListSpace);
     printf("-spa");
+    printf("\n");
     printSpaces(subListSpace);
     printf("-laundry");
+    printf("\n");
     printSpaces(subListSpace);
     printf("-bar");
+    printf("\n");
     printSpaces(subListSpace);
     printf("-massage");
+    printf("\n");
 }
 
 void getSuit(struct Bill *userBill) {
     printBillStruct(userBill, 1, 14);
-    printGoldSuit(5);
+    printGoldSuit(5, 1);
     printf("\n");
-    // printSilverSuit(5);
+    printSilverSuit(5);
     printf("\n");
-    // printBronzeSuit(5);
+    printBronzeSuit(5);
     printf("\n\n");
     printf("Enter Suit (1,2,3): ");
     scanf("%d", &(userBill->selectedSuitType));
