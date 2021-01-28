@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #ifdef _WIN32
 #include <windows.h>
@@ -9,7 +10,7 @@
 // TODO make this clean code; this is very ugly
 
 #define TERMINAL_WIDTH 80
-#define TERMINAL_HEIGHT 24
+#define TERMINAL_HEIGHT 28
 
 struct Gold {
     int spa;
@@ -52,9 +53,11 @@ void initializeBillStructWithZeros(struct Bill *userBill);
 
 void getCustomerDetails(struct Bill *userBill);
 
-void printGoldSuit(int space, int n);
-void printSilverSuit(int space, int n);
-void printBronzeSuit(int space, int n);
+void printGoldSuitWithoutCost(int space, int n);
+void printSilverSuitWithoutCost(int space, int n);
+void printBronzeSuitWithoutCost(int space, int n);
+
+void getGoldDetails(struct Bill *userBill, struct Gold *goldStruct);
 
 void getSuit(struct Bill *userBill);
 
@@ -71,22 +74,45 @@ int main() {
 
     getSuit(&userBill);
 
+    switch (userBill.selectedSuitType) {
+        case 1: {
+            struct Gold goldStruct;
+            getGoldDetails(&userBill, &goldStruct);
+            break;
+        }
+
+            /* case 2:
+            struct Gold silverStruct;
+            getSilverDetails(,&silverStruct);
+            break;
+
+        case 3:
+            struct Gold bronzeStruct;
+            getBronzeDetails(,&bronzeStruct);
+            break; */
+
+        default:
+            printf("Something went wrong");
+            exit(0);
+            break;
+    }
+
     return 0;
 }
 
 void getSuit(struct Bill *userBill) {
     printBillStruct(userBill, 1, 14);
-    printGoldSuit(5, 1);
+    printGoldSuitWithoutCost(5, 1);
     printf("\n");
-    printSilverSuit(5, 2);
+    printSilverSuitWithoutCost(5, 2);
     printf("\n");
-    printBronzeSuit(5, 3);
+    printBronzeSuitWithoutCost(5, 3);
     printf("\n\n");
     printf("Enter Suit (1,2,3): ");
     scanf("%d", &(userBill->selectedSuitType));
 }
 
-void printGoldSuit(int space, int n) {
+void printGoldSuitWithoutCost(int space, int n) {
     int subListSpace = space + 2;
     printSpaces(space);
     printf("%d.Gold ", n);
@@ -105,7 +131,62 @@ void printGoldSuit(int space, int n) {
     printf("\n");
 }
 
-void printSilverSuit(int space, int n) {
+void printGoldSuitWithCost(int space, struct Gold *gold) {
+    int subListSpace = space + 2;
+    printSpaces(space);
+    printf("Gold");
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-spa %d", gold->spa);
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-laundry %d", gold->laundry);
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-bar %d", gold->bar);
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-massage %d", gold->massage);
+    printf("\n");
+    printf("\n");
+}
+
+void initilizeGoldStruct(struct Gold *goldStruct) {
+    goldStruct->bar = 0;
+    goldStruct->laundry = 0;
+    goldStruct->massage = 0;
+    goldStruct->spa = 0;
+}
+
+void getGoldDetails(struct Bill *userBill, struct Gold *goldStruct) {
+    int n = 0;
+    initilizeGoldStruct(goldStruct);
+
+    printBillStruct(userBill, 1, 14);
+    printGoldSuitWithCost(5, goldStruct);
+    getIntInput(&n, "Spa for Nights (Zero for None): ", 5);
+    goldStruct->spa = n * 500;
+
+    printBillStruct(userBill, 1, 14);
+    printGoldSuitWithCost(5, goldStruct);
+    getIntInput(&n, "Laundry for Nights (Zero for None): ", 5);
+    goldStruct->laundry = n * 300;
+
+    printBillStruct(userBill, 1, 14);
+    printGoldSuitWithCost(5, goldStruct);
+    getIntInput(&n, "Bar for Nights (Zero for None): ", 5);
+    goldStruct->bar = n * 5000;
+
+    printBillStruct(userBill, 1, 14);
+    printGoldSuitWithCost(5, goldStruct);
+    getIntInput(&n, "Massage for person (Zero for None): ", 5);
+    goldStruct->massage = n * 2000;
+
+    printBillStruct(userBill, 1, 14);
+    printGoldSuitWithCost(5, goldStruct);
+}
+
+void printSilverSuitWithoutCost(int space, int n) {
     int subListSpace = space + 2;
     printSpaces(space);
     printf("%d.Silver ", n);
@@ -124,7 +205,7 @@ void printSilverSuit(int space, int n) {
     printf("\n");
 }
 
-void printBronzeSuit(int space, int n) {
+void printBronzeSuitWithoutCost(int space, int n) {
     int subListSpace = space + 2;
     printSpaces(space);
     printf("%d.Bronze ", n);
