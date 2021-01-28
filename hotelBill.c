@@ -112,13 +112,63 @@ int main() {
             break;
     }
 
-    // caculateBill(&userBill);
+    calculateBill(&userBill);
+
+    printBillStruct(&userBill, 1, 14);
 
     return 0;
 }
-
+// lets suppose; days = nights - 1
 void calculateBill(struct Bill *userBill) {
-    // todo
+    int days = userBill->nights - 1;
+    int cost = 0;
+    if (userBill->selectedSuitType == 1) {  // gold case
+        cost = 10000 * userBill->nights;
+        struct Gold *goldStruct = (struct Gold *)userBill->selectedSuit;
+        if (goldStruct->spa) {
+            cost += 500 * userBill->nights;
+        }
+        if (goldStruct->laundry) {
+            cost += 300 * userBill->nights;
+        }
+        if (goldStruct->bar) {
+            cost += 5000 * userBill->nights;
+        }
+        if (goldStruct->massage) {
+            cost += 2000 * userBill->persons;
+        }
+    } else if (userBill->selectedSuitType == 2) {  // silver case
+        cost = 7000 * userBill->nights;
+        struct Silver *silverStruct = (struct Gold *)userBill->selectedSuit;
+        if (silverStruct->lunch) {
+            cost += 250 * days * userBill->persons;
+        }
+        if (silverStruct->dinner) {
+            cost += 350 * userBill->nights;
+        }
+        if (silverStruct->laundry) {
+            cost += 150 * userBill->persons;
+        }
+        if (silverStruct->additionalBed) {
+            cost += 1250 * userBill->nights;
+        }
+    } else if (userBill->selectedSuitType == 3) {  // bronze case
+        cost = 4000 * userBill->nights;
+        struct Bronze *bronzeStruct = (struct Gold *)userBill->selectedSuit;
+        if (bronzeStruct->breakFast) {
+            cost += 100 * days * userBill->persons;
+        }
+        if (bronzeStruct->carParking) {
+            cost += 50 * userBill->nights;
+        }
+        if (bronzeStruct->hotWater) {
+            cost += 50 * userBill->persons * userBill->nights;
+        }
+    } else {
+        printf("Something went wrong");
+        exit(0);
+    }
+    userBill->cost = cost;
 }
 
 void getSuit(struct Bill *userBill) {
