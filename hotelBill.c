@@ -232,7 +232,7 @@ void printSilverSuit(int space, int n) {
     printf("\n");
 }
 
-void printSilverSuitWithCost(int space, struct Silver *silver) {
+void printSilverSuitWithEnabledOptions(int space, struct Silver *silver) {
     int subListSpace = space + 2;
     printSpaces(space);
     printf("Silver");
@@ -253,10 +253,10 @@ void printSilverSuitWithCost(int space, struct Silver *silver) {
 }
 
 void initilizeSilverStruct(struct Silver *silverStruct) {
-    silverStruct->lunch = 0;
-    silverStruct->dinner = 0;
-    silverStruct->laundry = 0;
-    silverStruct->additionalBed = 0;
+    silverStruct->lunch = false;
+    silverStruct->dinner = false;
+    silverStruct->laundry = false;
+    silverStruct->additionalBed = false;
 }
 
 void getSilverDetails(struct Bill *userBill, struct Silver *silverStruct) {
@@ -264,27 +264,23 @@ void getSilverDetails(struct Bill *userBill, struct Silver *silverStruct) {
     initilizeSilverStruct(silverStruct);
 
     printBillStruct(userBill, 1, 14);
-    printSilverSuitWithCost(5, silverStruct);
-    getIntInput(&n, "Lunch for Person (Zero for None): ", 5);
-    silverStruct->lunch = n * 250;
+    printSilverSuitWithEnabledOptions(10, silverStruct);
+    silverStruct->lunch = getOptInput("Lunch", 5);
 
     printBillStruct(userBill, 1, 14);
-    printSilverSuitWithCost(5, silverStruct);
-    getIntInput(&n, "Dinner for Persons (Zero for None): ", 5);
-    silverStruct->dinner = n * 350;
+    printSilverSuitWithEnabledOptions(10, silverStruct);
+    silverStruct->dinner = getOptInput("Dinner", 5);
 
     printBillStruct(userBill, 1, 14);
-    printSilverSuitWithCost(5, silverStruct);
-    getIntInput(&n, "Laundry for Persons (Zero for None): ", 5);
-    silverStruct->laundry = n * 150;
+    printSilverSuitWithEnabledOptions(10, silverStruct);
+    silverStruct->laundry = getOptInput("Laundry", 5);
 
     printBillStruct(userBill, 1, 14);
-    printSilverSuitWithCost(5, silverStruct);
-    getIntInput(&n, "Additional Beds for Nights (Zero for None): ", 5);
-    silverStruct->additionalBed = n * 1250;
+    printSilverSuitWithEnabledOptions(10, silverStruct);
+    silverStruct->additionalBed = getOptInput("Additional Bed", 5);
 
     printBillStruct(userBill, 1, 14);
-    printSilverSuitWithCost(5, silverStruct);
+    printSilverSuitWithEnabledOptions(10, silverStruct);
 }
 
 void printBronzeSuit(int space, int n) {
