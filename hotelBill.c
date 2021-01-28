@@ -60,6 +60,10 @@ void printGoldSuit(int space, int n);
 void printSilverSuit(int space, int n);
 void printBronzeSuit(int space, int n);
 
+void printGoldSuitWithEnabledOptions(int space, struct Gold *gold);
+void printSilverSuitWithEnabledOptions(int space, struct Silver *silver);
+void printBronzeSuitWithEnabledOptions(int space, struct Bronze *bronze);
+
 void getGoldDetails(struct Bill *userBill, struct Gold *goldStruct);
 void getSilverDetails(struct Bill *userBill, struct Silver *silverStruct);
 void getBronzeDetails(struct Bill *userBill, struct Bronze *bronzeStruct);
@@ -116,6 +120,18 @@ int main() {
 
     printBillStruct(&userBill, 1, 14);
 
+    switch (userBill.selectedSuitType) {
+        case 1:
+            printGoldSuitWithEnabledOptions(10, userBill.selectedSuit);
+            break;
+        case 2:
+            printSilverSuitWithEnabledOptions(10, userBill.selectedSuit);
+            break;
+        case 3:
+            printBronzeSuitWithEnabledOptions(10, userBill.selectedSuit);
+            break;
+    }
+
     return 0;
 }
 // lets suppose; days = nights - 1
@@ -139,7 +155,7 @@ void calculateBill(struct Bill *userBill) {
         }
     } else if (userBill->selectedSuitType == 2) {  // silver case
         cost = 7000 * userBill->nights;
-        struct Silver *silverStruct = (struct Gold *)userBill->selectedSuit;
+        struct Silver *silverStruct = (struct Silver *)userBill->selectedSuit;
         if (silverStruct->lunch) {
             cost += 250 * days * userBill->persons;
         }
@@ -154,7 +170,7 @@ void calculateBill(struct Bill *userBill) {
         }
     } else if (userBill->selectedSuitType == 3) {  // bronze case
         cost = 4000 * userBill->nights;
-        struct Bronze *bronzeStruct = (struct Gold *)userBill->selectedSuit;
+        struct Bronze *bronzeStruct = (struct Bronze *)userBill->selectedSuit;
         if (bronzeStruct->breakFast) {
             cost += 100 * days * userBill->persons;
         }
