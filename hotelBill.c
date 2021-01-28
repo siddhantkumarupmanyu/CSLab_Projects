@@ -53,6 +53,8 @@ void initializeBillStructWithZeros(struct Bill *userBill);
 void getCustomerDetails(struct Bill *userBill);
 
 void printGoldSuit(int space, int n);
+void printSilverSuit(int space, int n);
+void printBronzeSuit(int space, int n);
 
 void getSuit(struct Bill *userBill);
 
@@ -70,6 +72,18 @@ int main() {
     getSuit(&userBill);
 
     return 0;
+}
+
+void getSuit(struct Bill *userBill) {
+    printBillStruct(userBill, 1, 14);
+    printGoldSuit(5, 1);
+    printf("\n");
+    printSilverSuit(5, 2);
+    printf("\n");
+    printBronzeSuit(5, 3);
+    printf("\n\n");
+    printf("Enter Suit (1,2,3): ");
+    scanf("%d", &(userBill->selectedSuitType));
 }
 
 void printGoldSuit(int space, int n) {
@@ -91,16 +105,39 @@ void printGoldSuit(int space, int n) {
     printf("\n");
 }
 
-void getSuit(struct Bill *userBill) {
-    printBillStruct(userBill, 1, 14);
-    printGoldSuit(5, 1);
+void printSilverSuit(int space, int n) {
+    int subListSpace = space + 2;
+    printSpaces(space);
+    printf("%d.Silver ", n);
     printf("\n");
-    printSilverSuit(5);
+    printSpaces(subListSpace);
+    printf("-lunch");
     printf("\n");
-    printBronzeSuit(5);
-    printf("\n\n");
-    printf("Enter Suit (1,2,3): ");
-    scanf("%d", &(userBill->selectedSuitType));
+    printSpaces(subListSpace);
+    printf("-dinner");
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-laundry");
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-additionalBed");
+    printf("\n");
+}
+
+void printBronzeSuit(int space, int n) {
+    int subListSpace = space + 2;
+    printSpaces(space);
+    printf("%d.Bronze ", n);
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-breakfast");
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-carParking");
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-hotWater");
+    printf("\n");
 }
 
 void getCustomerDetails(struct Bill *userBill) {
