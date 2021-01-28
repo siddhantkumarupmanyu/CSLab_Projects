@@ -2,11 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <unistd.h>
-#endif  // _WIN32
 
 // TODO make this clean code; this is very ugly
 
@@ -47,12 +42,13 @@ struct Bill {
 
 void clearScreen();
 
+bool getOptInput(char *prompt, int spaces);
 void getIntInput(int *input, char *prompt, int space);
 void getStringInput(char input[], char *prompt, int space);
 
 void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace);
 
-void initializeBillStructWithZeros(struct Bill *userBill);
+void initializeBillStruct(struct Bill *userBill);
 
 void getCustomerDetails(struct Bill *userBill);
 
@@ -79,7 +75,7 @@ void calculateBill(struct Bill *userBill);
 int main() {
     struct Bill userBill;
 
-    initializeBillStructWithZeros(&userBill);
+    initializeBillStruct(&userBill);
 
     printBillStruct(&userBill, 1, 14);
 
@@ -242,17 +238,6 @@ void initilizeGoldStruct(struct Gold *goldStruct) {
     goldStruct->laundry = false;
     goldStruct->massage = false;
     goldStruct->spa = false;
-}
-
-bool getOptInput(char *prompt, int spaces) {
-    char ch;
-    printSpaces(spaces);
-    printf("%s (y/n): ", prompt);
-    scanf(" %c", &ch);  // https://stackoverflow.com/a/13543113
-    if (ch == 'y' | ch == 'Y') {
-        return true;
-    }
-    return false;
 }
 
 void getGoldDetails(struct Bill *userBill, struct Gold *goldStruct) {
@@ -428,7 +413,7 @@ void getCustomerDetails(struct Bill *userBill) {
     printBillStruct(userBill, 1, 14);
 }
 
-void initializeBillStructWithZeros(struct Bill *userBill) {
+void initializeBillStruct(struct Bill *userBill) {
     strcpy(userBill->name, "---");
     strcpy(userBill->id, "---");
     strcpy(userBill->address, "---");
@@ -479,6 +464,17 @@ void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace) {
     printf("\n");
 }
 
+bool getOptInput(char *prompt, int spaces) {
+    char ch;
+    printSpaces(spaces);
+    printf("%s (y/n): ", prompt);
+    scanf(" %c", &ch);  // https://stackoverflow.com/a/13543113
+    if (ch == 'y' | ch == 'Y') {
+        return true;
+    }
+    return false;
+}
+
 void getIntInput(int *input, char *prompt, int space) {
     printSpaces(space);
     printf("%s", prompt);
@@ -508,13 +504,4 @@ void clearScreen() {
     }
     printf("\033[0;0H");
     fflush(stdout);
-}
-
-void sleepcp(int milliseconds)  // Cross-platform sleep function
-{
-#ifdef _WIN32
-    Sleep(milliseconds);
-#else
-    usleep(milliseconds * 1000);
-#endif  // _WIN32
 }
