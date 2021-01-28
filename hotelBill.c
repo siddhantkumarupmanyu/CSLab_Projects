@@ -21,7 +21,7 @@ struct Gold {
 
 struct Silver {
     int lunch;
-    int dinnner;
+    int dinner;
     int laundry;
     int additionalBed;
 };
@@ -58,6 +58,7 @@ void printSilverSuitWithoutCost(int space, int n);
 void printBronzeSuitWithoutCost(int space, int n);
 
 void getGoldDetails(struct Bill *userBill, struct Gold *goldStruct);
+void getSilverDetails(struct Bill *userBill, struct Silver *goldStruct);
 
 void getSuit(struct Bill *userBill);
 
@@ -81,15 +82,16 @@ int main() {
             break;
         }
 
-            /* case 2:
-            struct Gold silverStruct;
-            getSilverDetails(,&silverStruct);
+        case 2: {
+            struct Silver silverStruct;
+            getSilverDetails(&userBill, &silverStruct);
             break;
+        }
 
-        case 3:
+            /* case 3:
             struct Gold bronzeStruct;
             getBronzeDetails(,&bronzeStruct);
-            break; */
+            break;  */
 
         default:
             printf("Something went wrong");
@@ -203,6 +205,61 @@ void printSilverSuitWithoutCost(int space, int n) {
     printSpaces(subListSpace);
     printf("-additionalBed");
     printf("\n");
+}
+
+void printSilverSuitWithCost(int space, struct Silver *silver) {
+    int subListSpace = space + 2;
+    printSpaces(space);
+    printf("Silver");
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-lunch  %d", silver->lunch);
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-dinner %d", silver->dinner);
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-laundry %d", silver->laundry);
+    printf("\n");
+    printSpaces(subListSpace);
+    printf("-additionalBed %d", silver->additionalBed);
+    printf("\n");
+    printf("\n");
+}
+
+void initilizeSilverStruct(struct Silver *silverStruct) {
+    silverStruct->lunch = 0;
+    silverStruct->dinner = 0;
+    silverStruct->laundry = 0;
+    silverStruct->additionalBed = 0;
+}
+
+void getSilverDetails(struct Bill *userBill, struct Silver *silverStruct) {
+    int n = 0;
+    initilizeSilverStruct(silverStruct);
+
+    printBillStruct(userBill, 1, 14);
+    printSilverSuitWithCost(5, silverStruct);
+    getIntInput(&n, "Lunch for Person (Zero for None): ", 5);
+    silverStruct->lunch = n * 250;
+
+    printBillStruct(userBill, 1, 14);
+    printSilverSuitWithCost(5, silverStruct);
+    getIntInput(&n, "Dinner for Persons (Zero for None): ", 5);
+    silverStruct->dinner = n * 350;
+
+    printBillStruct(userBill, 1, 14);
+    printSilverSuitWithCost(5, silverStruct);
+    getIntInput(&n, "Laundry for Persons (Zero for None): ", 5);
+    silverStruct->laundry = n * 150;
+
+    printBillStruct(userBill, 1, 14);
+    printSilverSuitWithCost(5, silverStruct);
+    getIntInput(&n, "Additional Beds for Nights (Zero for None): ", 5);
+    silverStruct->additionalBed = n * 1250;
+
+    printBillStruct(userBill, 1, 14);
+    printSilverSuitWithCost(5, silverStruct);
 }
 
 void printBronzeSuitWithoutCost(int space, int n) {
