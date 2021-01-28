@@ -1,2 +1,2 @@
-gcc -g taxiFair.c -o taxiFair
-./taxiFair
+gcc -g hotelBill.c -o hotelBill
+./hotelBill
