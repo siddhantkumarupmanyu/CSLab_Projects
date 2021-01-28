@@ -1,2 +1,2 @@
-gcc -g helloWorld.c -o helloWorld
-./helloWorld
+gcc -g taxiFair.c -o taxiFair
+./taxiFair
