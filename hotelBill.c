@@ -299,7 +299,7 @@ void printBronzeSuit(int space, int n) {
     printf("\n");
 }
 
-void printBronzeSuitWithCost(int space, struct Bronze *bronze) {
+void printBronzeSuitWithEnabledOptions(int space, struct Bronze *bronze) {
     int subListSpace = space + 2;
     printSpaces(space);
     printf("Bronze");
@@ -317,9 +317,9 @@ void printBronzeSuitWithCost(int space, struct Bronze *bronze) {
 }
 
 void initilizeBronzeStruct(struct Bronze *bronzeStruct) {
-    bronzeStruct->breakFast = 0;
-    bronzeStruct->carParking = 0;
-    bronzeStruct->hotWater = 0;
+    bronzeStruct->breakFast = false;
+    bronzeStruct->carParking = false;
+    bronzeStruct->hotWater = false;
 }
 
 void getBronzeDetails(struct Bill *userBill, struct Bronze *bronzeStruct) {
@@ -327,22 +327,19 @@ void getBronzeDetails(struct Bill *userBill, struct Bronze *bronzeStruct) {
     initilizeBronzeStruct(bronzeStruct);
 
     printBillStruct(userBill, 1, 14);
-    printBronzeSuitWithCost(5, bronzeStruct);
-    getIntInput(&n, "Breakfast for Person (Zero for None): ", 5);
-    bronzeStruct->breakFast = n * 100;
+    printBronzeSuitWithEnabledOptions(10, bronzeStruct);
+    bronzeStruct->breakFast = getOptInput("Breakfast", 5);
 
     printBillStruct(userBill, 1, 14);
-    printBronzeSuitWithCost(5, bronzeStruct);
-    getIntInput(&n, "Car parking for Night (Zero for None): ", 5);
-    bronzeStruct->carParking = n * 50;
+    printBronzeSuitWithEnabledOptions(10, bronzeStruct);
+    bronzeStruct->carParking = getOptInput("Car Parking", 5);
 
     printBillStruct(userBill, 1, 14);
-    printBronzeSuitWithCost(5, bronzeStruct);
-    getIntInput(&n, "Hot water for Persons (Zero for None): ", 5);
-    bronzeStruct->hotWater = n * 50;
+    printBronzeSuitWithEnabledOptions(10, bronzeStruct);
+    bronzeStruct->hotWater = getOptInput("Hot Water", 5);
 
     printBillStruct(userBill, 1, 14);
-    printBronzeSuitWithCost(5, bronzeStruct);
+    printBronzeSuitWithEnabledOptions(10, bronzeStruct);
 }
 
 void getCustomerDetails(struct Bill *userBill) {
