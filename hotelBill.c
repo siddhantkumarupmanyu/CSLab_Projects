@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,23 +14,23 @@
 #define TERMINAL_HEIGHT 28
 
 struct Gold {
-    int spa;
-    int laundry;
-    int bar;
-    int massage;
+    bool spa;
+    bool laundry;
+    bool bar;
+    bool massage;
 };
 
 struct Silver {
-    int lunch;
-    int dinner;
-    int laundry;
-    int additionalBed;
+    bool lunch;
+    bool dinner;
+    bool laundry;
+    bool additionalBed;
 };
 
 struct Bronze {
-    int breakFast;
-    int carParking;
-    int hotWater;
+    bool breakFast;
+    bool carParking;
+    bool hotWater;
 };
 
 struct Bill {
@@ -37,9 +38,11 @@ struct Bill {
     char id[25];
     char address[25];
     char contactNo[25];
-    int numberOfDays;
+    int nights;
+    int persons;
     int selectedSuitType;
     void *selectedSuit;
+    int cost;
 };
 
 void clearScreen();
@@ -53,7 +56,7 @@ void initializeBillStructWithZeros(struct Bill *userBill);
 
 void getCustomerDetails(struct Bill *userBill);
 
-void printGoldSuitWithoutCost(int space, int n);
+void printGoldSuit(int space, int n);
 void printSilverSuitWithoutCost(int space, int n);
 void printBronzeSuitWithoutCost(int space, int n);
 
@@ -64,6 +67,8 @@ void getBronzeDetails(struct Bill *userBill, struct Bronze *bronzeStruct);
 void getSuit(struct Bill *userBill);
 
 void printSpaces(int count);
+
+void calculateBill(struct Bill *userBill);
 
 // it would be much easier to write if we used oop language
 
@@ -107,12 +112,18 @@ int main() {
             break;
     }
 
+    // caculateBill(&userBill);
+
     return 0;
+}
+
+void calculateBill(struct Bill *userBill) {
+    // todo
 }
 
 void getSuit(struct Bill *userBill) {
     printBillStruct(userBill, 1, 14);
-    printGoldSuitWithoutCost(5, 1);
+    printGoldSuit(5, 1);
     printf("\n");
     printSilverSuitWithoutCost(5, 2);
     printf("\n");
@@ -122,7 +133,7 @@ void getSuit(struct Bill *userBill) {
     scanf("%d", &(userBill->selectedSuitType));
 }
 
-void printGoldSuitWithoutCost(int space, int n) {
+void printGoldSuit(int space, int n) {
     int subListSpace = space + 2;
     printSpaces(space);
     printf("%d.Gold ", n);
@@ -141,7 +152,7 @@ void printGoldSuitWithoutCost(int space, int n) {
     printf("\n");
 }
 
-void printGoldSuitWithCost(int space, struct Gold *gold) {
+void printGoldSuitWithEnabledOptions(int space, struct Gold *gold) {
     int subListSpace = space + 2;
     printSpaces(space);
     printf("Gold");
@@ -168,32 +179,38 @@ void initilizeGoldStruct(struct Gold *goldStruct) {
     goldStruct->spa = 0;
 }
 
+bool getOptInput(char *prompt, int spaces) {
+    char ch;
+    printf("%s (y/n): ", prompt);
+    scanf("%c", &ch);
+    if (ch == 'y') {
+        return true;
+    }
+    return false;
+}
+
 void getGoldDetails(struct Bill *userBill, struct Gold *goldStruct) {
     int n = 0;
     initilizeGoldStruct(goldStruct);
 
     printBillStruct(userBill, 1, 14);
-    printGoldSuitWithCost(5, goldStruct);
-    getIntInput(&n, "Spa for Nights (Zero for None): ", 5);
-    goldStruct->spa = n * 500;
+    printGoldSuitWithEnabledOptions(5, goldStruct);
+    goldStruct->spa = getOptInput("Spa", 5);
 
     printBillStruct(userBill, 1, 14);
-    printGoldSuitWithCost(5, goldStruct);
-    getIntInput(&n, "Laundry for Nights (Zero for None): ", 5);
-    goldStruct->laundry = n * 300;
+    printGoldSuitWithEnabledOptions(5, goldStruct);
+    goldStruct->laundry = getOptInput("Laundry", 5);
 
     printBillStruct(userBill, 1, 14);
-    printGoldSuitWithCost(5, goldStruct);
-    getIntInput(&n, "Bar for Nights (Zero for None): ", 5);
-    goldStruct->bar = n * 5000;
+    printGoldSuitWithEnabledOptions(5, goldStruct);
+    goldStruct->bar = getOptInput("Bar", 5);
 
     printBillStruct(userBill, 1, 14);
-    printGoldSuitWithCost(5, goldStruct);
-    getIntInput(&n, "Massage for person (Zero for None): ", 5);
-    goldStruct->massage = n * 2000;
+    printGoldSuitWithEnabledOptions(5, goldStruct);
+    goldStruct->massage = getOptInput("Massage ", 5);
 
     printBillStruct(userBill, 1, 14);
-    printGoldSuitWithCost(5, goldStruct);
+    printGoldSuitWithEnabledOptions(5, goldStruct);
 }
 
 void printSilverSuitWithoutCost(int space, int n) {
@@ -345,7 +362,10 @@ void getCustomerDetails(struct Bill *userBill) {
     getStringInput(userBill->contactNo, "Enter Contact No: ", 5);
     printBillStruct(userBill, 1, 14);
 
-    getIntInput(&(userBill->numberOfDays), "Enter Number of days: ", 5);
+    getIntInput(&(userBill->nights), "Enter Number of Nights: ", 5);
+    printBillStruct(userBill, 1, 14);
+
+    getIntInput(&(userBill->persons), "Enter Number of Persons: ", 5);
     printBillStruct(userBill, 1, 14);
 }
 
@@ -354,9 +374,11 @@ void initializeBillStructWithZeros(struct Bill *userBill) {
     strcpy(userBill->id, "---");
     strcpy(userBill->address, "---");
     strcpy(userBill->contactNo, "---");
-    userBill->numberOfDays = 0;
+    userBill->nights = 0;
+    userBill->persons = 0;
     userBill->selectedSuitType = -1;
     userBill->selectedSuit = NULL;
+    userBill->cost = 0;
 }
 
 void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace) {
@@ -366,25 +388,33 @@ void printBillStruct(struct Bill *bill, int initialSpace, int inBetweenSpace) {
     printf("\n");
 
     printSpaces(initialSpace);
-    printf("      Name: %s", bill->name);
+    printf("   Name: %s", bill->name);
     printSpaces(inBetweenSpace);
-    printf("              Id: %s", bill->id);
+    printf("        Id: %s", bill->id);
 
     printf("\n");
     printf("\n");
 
     printSpaces(initialSpace);
-    printf("   Address: %s", bill->address);
+    printf("Address: %s", bill->address);
     printSpaces(inBetweenSpace);
-    printf("      Contact No: %s", bill->contactNo);
+    printf("Contact No: %s", bill->contactNo);
 
     printf("\n");
     printf("\n");
 
     printSpaces(initialSpace);
-    printf("No of days: %d", bill->numberOfDays);
+    printf(" Nights: %d", bill->nights);
     printSpaces(inBetweenSpace);
-    printf("Selected Suit Type: %d", bill->selectedSuitType);
+    printf("      Person: %d", bill->selectedSuitType);
+
+    printf("\n");
+    printf("\n");
+
+    printSpaces(initialSpace);
+    printf("Selected Suit Type: %d", bill->persons);
+    printSpaces(inBetweenSpace);
+    printf("Cost: ₹ %d", bill->cost);
 
     printf("\n");
     printf("\n");
